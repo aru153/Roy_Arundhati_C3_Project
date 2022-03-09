@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RestaurantTest {
     Restaurant restaurant;
-
+    List<Item> menu = new ArrayList();
+    
     //REFACTOR ALL THE REPEATED LINES OF CODE
     public void newRestaurant() {
         LocalTime openingTime = LocalTime.parse("10:30:00");
@@ -68,6 +69,21 @@ class RestaurantTest {
                 ()->restaurant.removeFromMenu("French fries"));
     }
 
+    @Test
+    public void order_total_for_all_items_present() {
+     this.newRestaurant();
+     this.menu = this.restaurant.getMenu();
+     Assertions.assertEquals(388, this.restaurant.getOrderTotal(this.menu));
+    }
 
+    @Test
+    public void order_total_should_reduce_when_1_item_removed() {
+     this.newRestaurant();
+     this.menu = this.restaurant.getMenu();
+     int total = this.restaurant.getOrderTotal(this.menu);
+     int afterTotal = ((Item)this.menu.get(1)).getPrice();
+     this.menu.remove(1);
+     Assertions.assertEquals(total - afterTotal, this.restaurant.getOrderTotal(this.menu));
+    }
     //<<<<<<<<<<<<<<<<<<<<<<<MENU>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 }
